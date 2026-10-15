@@ -1,0 +1,8 @@
+{
+  "version": "0.2.0",
+  "channel": "pilot",
+  "preview": "preview.html",
+  "local": "StorePOS-Local.html",
+  "online": null,
+  "notes": "Separate local and online stores. Online activation is pending Google authorization."
+}
