@@ -1,0 +1,208 @@
+/* Easy-to-use layer (v0.3.0). Loaded after styles.css and responsive.css.
+   Goal: a cashier who is 9 or 69 can sell without help — big text, big targets, one obvious next step.
+   Sections: base sizes · rail menu · Sell screen · keypad · checkout · photos · phone · print */
+:root{--green:#174f3b;--green-2:#2f6b4c;--green-soft:#eaf3e6;--lime:#d8f27a;--ink:#1d3a2e;--muted:#5f7066;--line:#dfe6dc;--warn:#a2421f;--warn-soft:#fdf1e7;--amber-soft:#fff6df;--radius-lg:16px}
+
+/* ---------- Base sizes: nothing important below 14px ---------- */
+body{font-size:15px;color:var(--ink)}
+h1{font-size:24px}h2{font-size:19px}h3{font-size:16px}small{font-size:13px}
+label{font-size:14px;color:var(--muted)}
+input,select,textarea{font-size:16px;min-height:48px}
+.btn{font-size:15px;min-height:48px;padding:12px 18px;border-radius:10px}
+.btn.small{font-size:13px;min-height:40px;padding:8px 12px}
+.notice{font-size:14px}
+table{font-size:14px}
+.subtitle{font-size:14px}
+.checkbox{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--ink);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.checkbox input{width:24px;height:24px;min-height:0;flex:none;accent-color:var(--green)}
+.icon-btn{min-width:44px;min-height:44px}
+#toast{font-size:15px}
+
+/* ---------- Rail menu: icon + word, always visible ---------- */
+.shell{grid-template-columns:96px minmax(0,1fr)}
+.sidebar.rail{display:flex;flex-direction:column;align-items:center;padding:14px 8px;gap:6px;width:auto;position:sticky;top:0;height:100vh;box-shadow:none}
+.rail .brand{padding:0 0 10px}
+.rail .brand img{width:44px;height:44px}
+.sidebar.rail{scrollbar-width:none}
+.rail .nav{display:flex;flex-direction:column;gap:4px;width:100%}
+.rail .nav button{position:relative;flex-direction:column;justify-content:center;gap:2px;padding:8px 4px;min-height:64px;width:100%;border-radius:12px;color:var(--muted);font-size:13px;font-weight:700;text-align:center}
+.rail .nav button span{display:block}
+.rail .nav button small{display:block;font-size:11px;font-weight:500;opacity:.8}
+.rail .nav button .icon{width:26px;height:26px}
+.rail .nav button.active{background:var(--green);color:#fff}
+.rail .nav .badge{display:block;position:absolute;top:6px;right:10px;margin:0;background:var(--warn);color:#fff;font-size:11px;padding:1px 6px;border-radius:99px}
+.rail .owner{margin-top:auto;padding-top:10px}
+.rail .owner div{display:none}
+.topbar{height:64px;font-size:14px}
+.breadcrumb .store-name{font-size:16px;color:var(--ink)}
+
+/* ---------- Sell screen ---------- */
+.pos-page{padding-top:18px}
+.pos-page .mode-banner{margin-bottom:14px;padding:8px 14px}
+.pos-page .footnote{display:none}
+.session-closed{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--amber-soft);border-color:#efd9a7;color:#6b4f12;font-size:15px}
+.session-closed strong{display:block;font-size:17px}
+.sell{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start}
+.shelf-top{display:flex;gap:12px;margin-bottom:12px}
+.shelf-top .search{flex:1;max-width:none}
+.shelf-top .search input{font-size:17px;min-height:52px;padding-left:44px}
+.sell .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sell .filter{min-height:44px;padding:8px 18px;border-radius:99px;font-size:15px;font-weight:700;background:#fff;border:1px solid var(--line);color:var(--muted)}
+.sell .filter.active{background:var(--green);border-color:var(--green);color:#fff}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.product-tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:10px 10px 12px;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:var(--radius-lg);color:var(--ink);box-shadow:0 1px 2px #1d3a2e0d;transition:transform .08s,border-color .15s}
+.product-tile:active{transform:scale(.97)}
+.product-tile:hover{border-color:var(--green-2)}
+.product-tile.in-cart{border:2.5px solid var(--green)}
+.product-tile:disabled{opacity:.5}
+.thumb{display:grid;place-items:center;overflow:hidden;flex:none}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .icon{width:42%;height:42%;stroke-width:1.5}
+.tone-0{background:#f6ead2;color:#8a5a12}.tone-1{background:#e4efd9;color:#3b6d11}.tone-2{background:#efece4;color:#6b675c}.tone-3{background:#e7eef4;color:#2f5d80}
+.tile-thumb{width:100%;aspect-ratio:4/3;border-radius:12px;margin-bottom:6px}
+.tile-name{font-size:16px;line-height:1.25}
+.tile-price{font-size:21px;font-weight:800;font-family:Manrope,Arial,sans-serif}
+.tile-price small{font-size:13px;font-weight:600;color:var(--muted)}
+.tile-stock{font-size:13px;color:var(--muted)}
+.tile-stock.warn{color:var(--warn);font-weight:700}
+.tile-badge{position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:4px;background:var(--green);color:#fff;font-size:12px;font-weight:700;padding:4px 9px;border-radius:99px}
+.tile-badge .icon{width:14px;height:14px}
+
+.order{position:sticky;top:80px;display:flex;flex-direction:column;max-height:calc(100vh - 100px);background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden}
+.order-head{display:flex;justify-content:space-between;align-items:baseline;padding:16px 18px 10px;border-bottom:1px solid var(--line)}
+.order-head h2 small{font-size:14px;color:var(--muted);font-weight:500}
+.order-head span{font-size:14px;color:var(--muted)}
+.order-lines{flex:1;overflow-y:auto;padding:4px 14px;min-height:120px}
+.order-lines .empty{font-size:15px;color:var(--muted)}
+.order-line{display:grid;grid-template-columns:48px minmax(0,1fr) auto;grid-template-areas:"thumb info price" "thumb step remove";gap:6px 10px;align-items:center;padding:12px 0;border-bottom:1px solid #eef2ec}
+.line-thumb{grid-area:thumb;width:48px;height:48px;border-radius:10px;align-self:start}
+.line-info{grid-area:info;background:none;text-align:left;padding:0;color:var(--ink);min-width:0}
+.line-info strong{display:block;font-size:16px;overflow-wrap:anywhere}
+.line-info small{display:block;color:var(--muted);font-size:14px;text-decoration:underline dotted;text-underline-offset:3px}
+.line-price{grid-area:price;font-size:16px}
+.stepper{grid-area:step;display:flex;gap:8px}
+.step{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--green);display:grid;place-items:center}
+.step .icon{width:20px;height:20px;stroke-width:2.4}
+.order-line .remove{grid-area:remove;justify-self:end;background:none;color:#9a6b5c;border-radius:50%}
+.order-foot{padding:14px 18px 16px;border-top:1px solid var(--line);background:#fbfcf9}
+.order-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.order-total span{font-size:17px;font-weight:700}
+.order-total strong{font-size:32px;font-family:Manrope,Arial,sans-serif;color:var(--green);letter-spacing:-.5px}
+.order-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.order-actions .btn{font-size:14px;padding:10px}
+.pay-btn{width:100%;min-height:62px;font-size:20px;border-radius:14px}
+.pay-btn .icon{width:26px;height:26px}
+.order-note{text-align:center;font-size:12px;color:#8a978c;margin-top:8px}
+
+/* ---------- Keypad pop-up ---------- */
+dialog.pad-dialog{width:min(470px,calc(100vw - 16px))}
+.pad-product{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.pad-thumb{width:64px;height:64px;border-radius:12px}
+.pad-product strong{display:block;font-size:18px}
+.pad-product small{color:var(--muted)}
+.unit-switch{display:grid;grid-template-columns:1fr 1fr;background:#f1f4ee;border-radius:12px;padding:4px;margin-bottom:12px}
+.unit-switch button{min-height:46px;border-radius:9px;background:none;font-size:15px;font-weight:700;color:var(--muted)}
+.unit-switch button[aria-pressed="true"]{background:#fff;color:var(--green);box-shadow:0 1px 3px #1d3a2e26}
+.pad-display{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;padding:12px 16px;border:2px solid var(--green);border-radius:14px;margin-bottom:12px}
+.pad-amount{font-size:34px;font-weight:800;font-family:Manrope,Arial,sans-serif}
+.pad-price{font-size:19px;font-weight:700;color:var(--green)}
+.pad-display.warn{border-color:var(--warn)}.pad-display.warn .pad-price{color:var(--warn)}
+.pad-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.pad-quick button,.cash-quick button{min-height:48px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:16px;font-weight:700;color:var(--ink)}
+.cash-quick button[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft)}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.keypad button{min-height:58px;border-radius:12px;background:#f1f4ee;font-size:26px;font-weight:700;color:var(--ink);display:grid;place-items:center}
+.keypad button:active,.pad-quick button:active,.cash-quick button:active{background:var(--green-soft)}
+.keypad .icon{width:28px;height:28px}
+dialog.pad-dialog .modal-actions .btn[type="submit"],dialog.checkout-dialog .modal-actions .btn[type="submit"]{flex:1;min-height:58px;font-size:18px}
+/* The main button stays reachable even when a pop-up has to scroll (phones). */
+dialog.pad-dialog .modal-actions,dialog.checkout-dialog .modal-actions{position:sticky;bottom:0;background:#fff;padding:10px 0 4px;margin-bottom:-4px;z-index:1}
+
+/* ---------- Checkout pop-up ---------- */
+dialog.checkout-dialog{width:min(920px,calc(100vw - 16px))}
+.checkout-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:22px}
+.checkout-grid h3{font-size:17px;margin-bottom:10px}
+.checkout-grid h3 small{font-size:14px;color:var(--muted);font-weight:500}
+.co-summary{background:#f7f9f4;border-radius:14px;padding:14px}
+.sum-line{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.sum-line .line-thumb{grid-area:auto;width:40px;height:40px;align-self:center}
+.sum-line small{display:block;color:var(--muted)}
+.sum-row,.sum-total{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0}
+.sum-total{border-top:2px solid var(--line);padding-top:12px}
+.sum-total span{font-size:17px;font-weight:700}
+.sum-total strong{font-size:30px;font-family:Manrope,Arial,sans-serif;color:var(--green)}
+.pay-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pay-tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin:0;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;color:var(--ink)}
+.pay-tile input{position:absolute;opacity:0;width:1px;height:1px;min-height:0}
+.pay-tile .icon{width:24px;height:24px;color:var(--green)}
+.pay-tile strong{font-size:16px}
+.pay-tile small{font-size:12px;color:var(--muted)}
+.pay-tile:has(input:checked){border:2.5px solid var(--green);background:var(--green-soft)}
+.pay-tile:has(input:focus-visible){outline:3px solid #88bca2;outline-offset:2px}
+.cash-quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:12px}
+.pay-result{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;padding:14px 16px;border-radius:14px;background:var(--green-soft);color:#24502f;margin-top:4px}
+.pay-result span{font-size:17px;font-weight:700}
+.pay-result strong{font-size:32px;font-family:Manrope,Arial,sans-serif}
+.pay-result small{flex-basis:100%;font-size:14px}
+.pay-result.warn{background:var(--warn-soft);color:var(--warn)}
+
+/* ---------- Photos ---------- */
+.product-cell{display:flex;gap:10px;align-items:center}
+.table-thumb{width:44px;height:44px;border-radius:10px}
+.photo-pad{display:grid;justify-items:center;gap:14px;text-align:center}
+.photo-preview{width:180px;height:180px;border-radius:18px}
+.photo-pick{cursor:pointer}
+
+/* Short screens (laptops, tablets sideways): keep the whole keypad visible without scrolling. */
+@media (max-height:860px){
+ .modal-head{padding:14px 22px 8px}
+ .pad-product{margin-bottom:8px}.pad-thumb{width:48px;height:48px}
+ .unit-switch{margin-bottom:8px}.unit-switch button{min-height:40px}
+ .pad-display{padding:6px 14px;margin-bottom:8px}.pad-amount{font-size:28px}
+ .pad-quick{grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:8px}.pad-quick button{min-height:42px;font-size:14px;padding:0 2px}
+ .keypad{gap:6px}.keypad button{min-height:46px;font-size:22px}
+ dialog.pad-dialog .modal-actions .btn[type="submit"],dialog.checkout-dialog .modal-actions .btn[type="submit"]{min-height:50px}
+ .pay-methods{gap:6px;margin-bottom:10px}.pay-tile{padding:8px 10px}
+ .checkout-dialog .field{margin-bottom:10px}.cash-quick{margin-bottom:8px}.cash-quick button{min-height:42px}
+ .pay-result{padding:8px 14px}.pay-result strong{font-size:26px}
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width:1100px){
+ .sell{grid-template-columns:minmax(0,1fr) 320px}
+ .product-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+}
+@media (max-width:900px){
+ .shell{grid-template-columns:88px minmax(0,1fr)}
+ .rail .nav button span,.rail .nav button small{display:block}
+ .rail .nav button{justify-content:center;padding:8px 2px}
+ .rail .nav .badge{display:block}
+ .sell{grid-template-columns:minmax(0,1fr)}
+ .order{position:static;max-height:none}
+ .checkout-grid{grid-template-columns:minmax(0,1fr)}
+}
+
+/* ---------- Phone: menu becomes a bottom bar ---------- */
+@media (max-width:650px){
+ .shell{display:block}
+ .sidebar.rail{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:12;height:auto;width:auto;flex-direction:row;padding:6px 6px max(6px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);border-right:0;box-shadow:0 -6px 20px #1d3a2e14}
+ .rail .brand,.rail .owner{display:none}
+ .rail .nav{flex-direction:row;overflow-x:auto;scrollbar-width:none;gap:4px}
+ .rail .nav button{flex:0 0 72px;min-height:60px;padding:6px 2px;font-size:12px}
+ .rail .nav button small{display:none}
+ .rail .nav button .icon{width:24px;height:24px}
+ .workspace{padding-bottom:100px}
+ .pos-page{padding-bottom:170px}
+ .topbar{height:56px}
+ .breadcrumb .page-name,.breadcrumb>span{display:none}
+ .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .tile-price{font-size:19px}
+ .shelf-top .btn{padding:10px 12px}
+ .mobile-checkout{display:flex;bottom:calc(84px + env(safe-area-inset-bottom));min-height:56px;font-size:16px;border-radius:14px}
+ #toast{bottom:160px}
+ .pay-methods{grid-template-columns:repeat(2,1fr)}
+ .pad-amount{font-size:30px}
+ .keypad button{min-height:54px}
+ dialog{max-height:94dvh}
+}
+@media print{.sidebar.rail{display:none!important}}
