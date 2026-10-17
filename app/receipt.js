@@ -1,3 +1,4 @@
+import {unitWord} from './core.js';
 // Receipt content and layout for thermal receipt printers (58 mm and 80 mm paper).
 // One layout feeds all three outputs: the paper on screen, the browser Print backup and Bluetooth printers.
 // Pure functions (no screen, no printer) so they can be tested. Amounts are centavos, quantities grams.
@@ -9,9 +10,9 @@ const RECEIPT_RULE='-',RECEIPT_CURRENCY='P';   // thermal printers have no peso 
 const METHOD_NAMES={'Bank Transfer':'Bank'};
 
 const peso=n=>new Intl.NumberFormat('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n/100);
-const amountOf=(n,unit)=>new Intl.NumberFormat('en-PH',{maximumFractionDigits:3}).format(n)+' '+unit;
 const stamp=at=>new Date(at).toLocaleString('en-PH',{timeZone:'Asia/Manila',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-function itemAmount(item){const sacks=item.unit==='sack';return `${amountOf(item.quantity/(sacks?item.unitGrams:1000),sacks?(item.quantity===item.unitGrams?'sack':'sacks'):'kg')} x ${peso(item.price)}`;}
+// "3 pieces x 16.00", "2.5 kg x 58.00", "1 box x 1,080.00": the amount in the unit it was sold by, times its price.
+function itemAmount(item){const n=item.quantity/item.unitSize;return `${new Intl.NumberFormat('en-PH',{maximumFractionDigits:3}).format(n)} ${unitWord(item.unit,n)} x ${peso(item.price)}`;}
 
 // What the receipt says, line by line. type: title · center · text · pair (left … right) · total · rule
 // tendered = cash the customer handed over (known only right after checkout); debt = what stays as utang.

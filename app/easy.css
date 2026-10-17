@@ -146,12 +146,30 @@ dialog.checkout-dialog{width:min(920px,calc(100vw - 16px))}
 .pay-result small{flex-basis:100%;font-size:14px}
 .pay-result.warn{background:var(--warn-soft);color:var(--warn)}
 
-/* ---------- Quick buy: kilo pad + payment in one pop-up ---------- */
-dialog.quick-dialog{width:min(980px,calc(100vw - 16px))}
-.quick-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:22px}
-.quick-grid h3{font-size:17px;margin-bottom:10px}.quick-grid h3 small{font-size:14px;color:var(--muted);font-weight:500}
-dialog.quick-dialog .modal-actions .btn[type="submit"]{flex:1;min-height:58px;font-size:17px}
-dialog.quick-dialog .modal-actions .pay-now{order:3;flex:1.4;font-size:19px}
+/* ---------- Payment steps 2–4 (v0.5.0): one question per screen ---------- */
+dialog.pay-dialog{width:min(620px,calc(100vw - 16px))}
+.step-label{font-size:14px;font-weight:700;color:var(--green-2);margin:-6px 0 8px}
+.pay-items{margin-bottom:10px}.pay-items summary{cursor:pointer;color:var(--muted);font-size:15px;min-height:36px;display:flex;align-items:center}
+.pay-total{display:flex;justify-content:space-between;align-items:baseline;padding:12px 16px;border-radius:14px;background:#f7f9f4;margin-bottom:14px}
+.pay-total span{font-size:17px;font-weight:700}.pay-total span small{font-weight:500;color:var(--muted)}
+.pay-total strong{font-size:34px;font-family:Manrope,Arial,sans-serif;color:var(--green)}
+.pay-dialog h3{font-size:18px;margin:0 0 10px}.pay-dialog h3 small{font-size:14px;color:var(--muted);font-weight:500}
+.pay-dialog .pay-methods{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pay-dialog .pay-tile{min-height:84px;padding:14px}.pay-dialog .pay-tile strong{font-size:19px}
+#more-pay{margin-top:4px;font-size:15px}
+/* Bills and coins: each tap adds what the customer hands over. */
+.bill-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.bill{min-height:58px;border-radius:12px;border:1.5px solid #cfe2c5;background:#f3f8ef;font-size:20px;font-weight:800;font-family:Manrope,Arial,sans-serif;color:var(--green)}
+.bill:active{transform:scale(.96);background:var(--green-soft)}
+.bill-grid.coins{grid-template-columns:repeat(5,minmax(0,1fr))}.bill.coin{min-height:50px;font-size:16px;border-radius:50px;background:#fbf7ec;border-color:#ecdcb3;color:#7a5a12}
+.bill.exact,.bill.clear{font-size:14px;font-family:inherit;background:#fff;border-color:var(--line);color:var(--ink);border-radius:12px}
+.pick{max-height:260px;overflow-y:auto}
+.pick-person{cursor:pointer}.pick-person input{position:absolute;opacity:0;width:1px;height:1px;min-height:0}
+.pick-person:has(input:checked){border:2.5px solid var(--green);background:var(--green-soft)}
+.pick-person:has(input:focus-visible){outline:3px solid #88bca2;outline-offset:2px}
+dialog.pay-dialog .modal-actions .btn[type="submit"]{flex:1;min-height:58px;font-size:18px}
+.sale-result{margin-bottom:14px}.sale-result .big-number strong{font-size:40px}
+.more-fields{margin:4px 0 12px}.more-fields summary{cursor:pointer;font-weight:700;color:var(--green-2);min-height:40px;display:flex;align-items:center}
 
 /* ---------- Receipt: paper slides out of a printer ---------- */
 dialog.receipt-dialog{width:min(560px,calc(100vw - 16px))}
@@ -262,7 +280,7 @@ dialog.count-dialog #count-result{position:sticky;bottom:80px;z-index:1;box-shad
  .rail .nav .badge{display:block}
  .sell{grid-template-columns:minmax(0,1fr)}
  .order{position:static;max-height:none}
- .checkout-grid,.quick-grid{grid-template-columns:minmax(0,1fr)}
+ .checkout-grid{grid-template-columns:minmax(0,1fr)}
 }
 
 /* ---------- Phone: menu becomes a bottom bar ---------- */
@@ -282,10 +300,11 @@ dialog.count-dialog #count-result{position:sticky;bottom:80px;z-index:1;box-shad
  .tile-grid.three .tile{padding:10px 8px}.tile-grid.three .tile strong{font-size:14px}.tile-grid.three .tile small{font-size:12px}
  .easy-head h1{font-size:24px}
  .card{grid-template-columns:minmax(0,1fr) auto}.card .btn{grid-column:1/-1}
- /* Quick buy: two buttons side by side (the × closes), so the payment tiles stay visible. */
- dialog.quick-dialog .modal-actions{flex-wrap:nowrap}
- dialog.quick-dialog .modal-actions [data-action="dismiss"]{display:none}
- dialog.quick-dialog .modal-actions .btn[type="submit"]{font-size:16px;padding:10px 8px}
+ dialog.pay-dialog .modal-actions{flex-wrap:nowrap}
+ /* Groups stay on one line so the products are visible sooner; swipe for more. */
+ .sell .filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-left:-4px;padding:2px 4px}.sell .filter{flex:none}
+ .pay-total strong{font-size:28px}.bill{min-height:54px;font-size:18px}
+ .bill-grid.coins{grid-template-columns:repeat(3,minmax(0,1fr))}.bill.exact{grid-column:span 2}
  .count-row{grid-template-columns:62px 44px minmax(44px,1fr) 44px 72px;gap:6px}.count-row .step{width:44px;height:44px}.denom{font-size:16px}
  .rail .nav button small{display:none}
  .rail .nav button .icon{width:24px;height:24px}
