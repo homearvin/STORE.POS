@@ -146,12 +146,94 @@ dialog.checkout-dialog{width:min(920px,calc(100vw - 16px))}
 .pay-result small{flex-basis:100%;font-size:14px}
 .pay-result.warn{background:var(--warn-soft);color:var(--warn)}
 
+/* ---------- Quick buy: kilo pad + payment in one pop-up ---------- */
+dialog.quick-dialog{width:min(980px,calc(100vw - 16px))}
+.quick-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:22px}
+.quick-grid h3{font-size:17px;margin-bottom:10px}.quick-grid h3 small{font-size:14px;color:var(--muted);font-weight:500}
+dialog.quick-dialog .modal-actions .btn[type="submit"]{flex:1;min-height:58px;font-size:17px}
+dialog.quick-dialog .modal-actions .pay-now{order:3;flex:1.4;font-size:19px}
+
+/* ---------- Receipt: paper slides out of a printer ---------- */
+dialog.receipt-dialog{width:min(560px,calc(100vw - 16px))}
+.printer{position:relative;z-index:1;display:flex;align-items:center;gap:12px;height:46px;padding:0 18px;background:#1f2a24;border-radius:16px 16px 8px 8px;box-shadow:0 6px 14px #1d3a2e33}
+.printer-light{width:9px;height:9px;border-radius:50%;background:#7bd389;animation:printer-blink .35s steps(2) 8}
+.printer-slot{flex:1;height:9px;border-radius:5px;background:#060a08;box-shadow:inset 0 2px 3px #000}
+.paper-window{display:flex;justify-content:center;overflow:hidden;margin:-23px 0 0;padding:0 8px 18px;filter:drop-shadow(0 3px 5px #1d3a2e2e)}
+/* Courier letters are 0.6em wide, so the paper is exactly "columns" letters wide, like the real printer. */
+.receipt-paper{--paper-font:min(15px,calc((100vw - 96px) / var(--cols) / .6));font:var(--paper-font)/1.4 'Courier New',Courier,monospace;width:calc(var(--cols) * .6em + 28px);padding:30px 14px 26px;background:#fff;color:#151515;white-space:pre;
+ -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50% / 14px 100%;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50% / 14px 100%;
+ animation:receipt-print-out calc(var(--rows) * 70ms) steps(var(--rows)) both}
+/* "Big" lines are printed double height, same width. */
+.receipt-paper .big{font-weight:700;transform:scaleY(1.7);margin:.4em 0}
+.receipt-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.receipt-actions .btn{flex:1;min-height:56px;font-size:17px}
+@keyframes receipt-print-out{from{transform:translateY(-100%)}to{transform:none}}
+@keyframes printer-blink{50%{background:#2f4a3a}}
+@media (prefers-reduced-motion:reduce){.receipt-paper,.printer-light{animation:none}}
+/* Print backup: only the receipt goes to the printer (the page size is set when printing). */
+#print-receipt{position:absolute;left:-9999px;top:0}
+#print-receipt .receipt-paper{width:auto;padding:0;font-size:inherit;-webkit-mask:none;mask:none;animation:none}
+@media print{body.printing-receipt>*:not(#print-receipt){display:none!important}body.printing-receipt #print-receipt{position:static;margin:0 auto}}
+
 /* ---------- Photos ---------- */
 .product-cell{display:flex;gap:10px;align-items:center}
 .table-thumb{width:44px;height:44px;border-radius:10px}
 .photo-pad{display:grid;justify-items:center;gap:14px;text-align:center}
 .photo-preview{width:180px;height:180px;border-radius:18px}
 .photo-pick{cursor:pointer}
+
+/* ---------- Easy screens (v0.4.0): big numbers and big tiles ---------- */
+[hidden]{display:none!important}
+.rail .nav .nav-more{display:none}
+.easy-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
+.easy-head h1{font-size:28px;margin:0}.easy-head h1 small{font-size:17px;color:var(--muted);font-weight:500}
+.easy-head .actions{display:flex;gap:8px;flex-wrap:wrap}
+.greeting{font-size:16px;color:var(--muted);margin:-6px 0 14px}
+.big-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.big-numbers.one{grid-template-columns:minmax(0,1fr)}
+.big-number{flex:1;display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-radius:var(--radius-lg);background:#fff;border:1.5px solid var(--line);min-width:0}
+.big-number>span{font-size:15px;font-weight:700}.big-number>span small{font-size:14px;font-weight:500;color:var(--muted)}
+.big-number strong{font-size:34px;font-family:Manrope,Arial,sans-serif;font-weight:800;letter-spacing:-.5px;line-height:1.15;overflow-wrap:anywhere}
+.big-number>small{font-size:14px;color:var(--muted)}
+.big-number.good{background:var(--green-soft);border-color:#cfe2c5}.big-number.good strong{color:var(--green)}
+.big-number.warn{background:var(--warn-soft);border-color:#f2d3bd}.big-number.warn strong{color:var(--warn)}
+.tile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.tile-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.tile-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:96px;padding:14px 16px;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:var(--radius-lg);color:var(--ink);transition:transform .08s,border-color .15s}
+.tile:hover{border-color:var(--green-2)}.tile:active{transform:scale(.97)}
+.tile .icon{width:30px;height:30px;color:var(--green);margin-bottom:6px}
+.tile strong{font-size:17px;line-height:1.2}
+.tile small{font-size:14px;color:var(--muted)}
+.tile-note{font-size:13px;margin-top:2px}
+.tile.good{background:var(--green);border-color:var(--green);color:#fff}.tile.good .icon,.tile.good small{color:#dcebd9}
+.tile.warn{background:var(--warn-soft);border-color:#f2d3bd;color:var(--warn)}.tile.warn .icon{color:var(--warn)}
+.tile.active{border:2.5px solid var(--green);background:var(--green-soft)}
+.period-line{font-size:15px;color:var(--muted);margin:0 0 12px}
+.section-label{font-size:19px;margin:22px 0 10px}.section-label small{font-size:15px;color:var(--muted);font-weight:500}
+.custom-dates{margin:-6px 0 12px}.custom-dates summary{cursor:pointer;font-weight:700;color:var(--green-2);min-height:40px;display:flex;align-items:center}
+.people{display:grid;gap:8px}
+.person{display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;min-height:72px;padding:12px 14px;background:#fff;border:1.5px solid var(--line);border-radius:14px;text-align:left;color:var(--ink)}
+.person .avatar{width:48px;height:48px;font-size:16px}
+.person-name strong{display:block;font-size:17px;overflow-wrap:anywhere}.person-name small{font-size:14px;color:var(--muted)}
+.person-owe{font-size:20px;font-family:Manrope,Arial,sans-serif}
+.person.late{border-color:#efc3a6;background:#fffaf6}.person.late .person-name small{color:var(--warn);font-weight:700}
+.cards{display:grid;gap:10px}
+.card{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:14px 16px;background:#fff;border:1.5px solid var(--line);border-radius:14px}
+.card-text strong{display:block;font-size:17px}.card-text small{color:var(--muted)}
+.card-amount{font-size:19px;font-family:Manrope,Arial,sans-serif}
+.list-rows .row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.printer-panel .tile{min-height:84px}
+.printer-panel .actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+/* Closing: count bills and coins */
+.counter{display:grid;gap:6px;margin:12px 0}
+.count-row{display:grid;grid-template-columns:76px 46px minmax(56px,1fr) 46px 96px;gap:8px;align-items:center}
+.denom{font-size:18px;font-weight:800;font-family:Manrope,Arial,sans-serif}
+.count-row input{text-align:center;font-size:20px;font-weight:700;min-height:46px;padding:4px}
+.count-row .step{width:46px;height:46px}
+.count-sum{text-align:right;font-size:16px}
+#type-total{margin:4px 0 10px;font-size:15px}
+/* Kulang / Sobra stays in view above the button while the cashier scrolls through the bills. */
+dialog.count-dialog #count-result{position:sticky;bottom:80px;z-index:1;box-shadow:0 0 0 6px #fff}
 
 /* Short screens (laptops, tablets sideways): keep the whole keypad visible without scrolling. */
 @media (max-height:860px){
@@ -169,6 +251,7 @@ dialog.checkout-dialog{width:min(920px,calc(100vw - 16px))}
 
 /* ---------- Tablet ---------- */
 @media (max-width:1100px){
+ .big-number strong{font-size:28px}
  .sell{grid-template-columns:minmax(0,1fr) 320px}
  .product-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
 }
@@ -179,7 +262,7 @@ dialog.checkout-dialog{width:min(920px,calc(100vw - 16px))}
  .rail .nav .badge{display:block}
  .sell{grid-template-columns:minmax(0,1fr)}
  .order{position:static;max-height:none}
- .checkout-grid{grid-template-columns:minmax(0,1fr)}
+ .checkout-grid,.quick-grid{grid-template-columns:minmax(0,1fr)}
 }
 
 /* ---------- Phone: menu becomes a bottom bar ---------- */
@@ -187,8 +270,23 @@ dialog.checkout-dialog{width:min(920px,calc(100vw - 16px))}
  .shell{display:block}
  .sidebar.rail{position:fixed;top:auto;left:0;right:0;bottom:0;z-index:12;height:auto;width:auto;flex-direction:row;padding:6px 6px max(6px,env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);border-right:0;box-shadow:0 -6px 20px #1d3a2e14}
  .rail .brand,.rail .owner{display:none}
- .rail .nav{flex-direction:row;overflow-x:auto;scrollbar-width:none;gap:4px}
- .rail .nav button{flex:0 0 72px;min-height:60px;padding:6px 2px;font-size:12px}
+ /* Five buttons that always fit: Sell, Utang, Cash, Stocks + More (no sideways scrolling). */
+ .rail .nav{flex-direction:row;gap:4px}
+ .rail .nav button{flex:1 1 0;min-width:0;min-height:60px;padding:6px 2px;font-size:12px}
+ .rail .nav button[data-page]:not(.on-bar){display:none}
+ .rail .nav .nav-more{display:flex}
+ .big-numbers{grid-template-columns:minmax(0,1fr);gap:10px}
+ .big-number{padding:12px 14px}.big-number strong{font-size:30px}
+ .tile-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .tile{min-height:84px;padding:12px}.tile strong{font-size:16px}.tile small{font-size:13px}
+ .tile-grid.three .tile{padding:10px 8px}.tile-grid.three .tile strong{font-size:14px}.tile-grid.three .tile small{font-size:12px}
+ .easy-head h1{font-size:24px}
+ .card{grid-template-columns:minmax(0,1fr) auto}.card .btn{grid-column:1/-1}
+ /* Quick buy: two buttons side by side (the × closes), so the payment tiles stay visible. */
+ dialog.quick-dialog .modal-actions{flex-wrap:nowrap}
+ dialog.quick-dialog .modal-actions [data-action="dismiss"]{display:none}
+ dialog.quick-dialog .modal-actions .btn[type="submit"]{font-size:16px;padding:10px 8px}
+ .count-row{grid-template-columns:62px 44px minmax(44px,1fr) 44px 72px;gap:6px}.count-row .step{width:44px;height:44px}.denom{font-size:16px}
  .rail .nav button small{display:none}
  .rail .nav button .icon{width:24px;height:24px}
  .workspace{padding-bottom:100px}
